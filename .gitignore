@@ -1,0 +1,11 @@
+# Ren'Py 运行时产物
+*.rpyc
+*.rpyb
+*.rpymc
+game/saves/
+game/cache/
+game/savetmp/
+log.txt
+errors.txt
+traceback.txt
+*.bak
