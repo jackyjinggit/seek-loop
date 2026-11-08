@@ -21,8 +21,9 @@ screen item_popup(pic, ttl):
         ## 桌面 textbox_height=185 / yalign=1.0 ⇒ 上沿 y=1080-185=895；
         ## yanchor 1.0 = 按钮底边贴住该线（small 变体下为 240 ⇒ 840，属手机档不在此列）。
         xalign 0.5 ypos 895 yanchor 1.0 text_size 30
-        background Solid("#1A2027") hover_background Solid("#2E3238")
-        text_color "#B48CD9" text_hover_color "#E8735A"
+        xpadding 30 ypadding 10
+        background Frame("images/bubble.png", 31, 31) hover_background Frame("images/bubble_hover.png", 31, 31)
+        text_color "#F2E6FF" text_hover_color "#FFB27A"
 
 screen panorama_screen(scene_img, item_label, revealed):
     if scene_img:
@@ -32,19 +33,26 @@ screen panorama_screen(scene_img, item_label, revealed):
         textbutton "环视":
             action Return("reveal")
             xpos 880 ypos 500 text_size 34
-            background Solid("#1A2027") hover_background Solid("#2E3238")
-            text_color "#D8B4F0" text_hover_color "#E8735A"
+            xpadding 34 ypadding 12
+            background Frame("images/bubble.png", 31, 31) hover_background Frame("images/bubble_hover.png", 31, 31)
+            text_color "#F2E6FF" text_hover_color "#FFB27A"
     else:
         textbutton item_label:
             action Return("take")
             xpos 820 ypos 500 text_size 30
-            background Solid("#1A2027") hover_background Solid("#2E3238")
-            text_color "#D8B4F0" text_hover_color "#E8735A"
+            xpadding 30 ypadding 12
+            background Frame("images/bubble.png", 31, 31) hover_background Frame("images/bubble_hover.png", 31, 31)
+            text_color "#F2E6FF" text_hover_color "#FFB27A"
             at item_reveal
 
     textbutton "离开":
         action Return("leave")
-        xpos 880 ypos 880 text_size 26 text_color "#B48CD9" text_hover_color "#E8735A"
+        xpos 880 ypos 880 text_size 26 xpadding 28 ypadding 10
+        background Frame("images/bubble.png", 31, 31) hover_background Frame("images/bubble_hover.png", 31, 31)
+        text_color "#F2E6FF" text_hover_color "#FFB27A"
+
+    text "（点击上面的气泡来选择；点空白处不会有反应）":
+        xalign 0.5 ypos 962 size 16 color "#8A94A8"
 
 
 ## 参数：call panorama_scene(场景图路径, 道具id, 道具显示名, 特写卡图路径)

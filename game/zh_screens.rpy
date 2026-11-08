@@ -187,7 +187,7 @@ screen history():
     viewport:
         xpos 200 ypos 180
         xsize 1520 ysize 700
-        yinitial 1.0          ## 🔴 打开即定位到最新对话（默认从第一条看起）
+        yinitial 1.0          ## 打开即定位到最新对话（默认从第一条看起）
         scrollbars "vertical"
         mousewheel True
         vbox:

@@ -4,7 +4,12 @@
 
 default persistent.unlocked_skins = ["x_glance"]        ## 立绘：初始记忆
 default persistent.unlocked_concepts = ["concept_helipad"]   ## 设定集：初始记忆（停机坪）
-default gallery_tab = "skin"                            ## 页签：立绘 / 设定集
+default persistent.unlocked_interacts = []               ## 片段：三结局齐后整组解锁
+default persistent.gallery_hidden_unlocked = False       ## 片段页签解锁标记
+default persistent.ending_a_seen = False                 ## 结局 A「送达」达成
+default persistent.ending_door_seen = False              ## 隐藏结局「门外」达成
+default persistent.ending_true_seen = False              ## 真结局「不再等待」达成
+default gallery_tab = "skin"                            ## 页签：立绘 / 设定集 / 片段
 
 init python:
     GALLERY_ITEMS = [
@@ -56,6 +61,31 @@ init python:
          "mem": "他们离开之后，地球已经独自生长了很久。", "cond": "真结局「不再等待」"},
     ]
 
+    INTERACT_ITEMS = [
+        {"id": "interact_01", "img": "images/gallery/interact_01.png", "name": "片段 · 隔桌",
+         "mem": "她隔着桌子看过来。像等了很久，也像刚刚坐下。"},
+        {"id": "interact_02", "img": "images/gallery/interact_02.png", "name": "片段 · 卡片",
+         "mem": "桌上的卡片摊开着。每一张，都是一个名字。"},
+        {"id": "interact_03", "img": "images/gallery/interact_03.png", "name": "片段 · 阅读",
+         "mem": "她低头读小本子。读得很慢，像在读很多个人。"},
+        {"id": "interact_04", "img": "images/gallery/interact_04.png", "name": "片段 · 交付",
+         "mem": "珊瑚红递过去。她的手很稳，比我的稳。"},
+        {"id": "interact_05", "img": "images/gallery/interact_05.png", "name": "片段 · 第四十六次",
+         "mem": "她指给我看那一行：第四十六次。"},
+        {"id": "interact_06", "img": "images/gallery/interact_06.png", "name": "片段 · 茶包",
+         "mem": "茶包推过来。推得很轻，像怕惊动什么。"},
+        {"id": "interact_07", "img": "images/gallery/interact_07.png", "name": "片段 · 压平",
+         "mem": "她把那张卡片压平。像压平一段很长的等待。"},
+        {"id": "interact_08", "img": "images/gallery/interact_08.png", "name": "片段 · 纸包",
+         "mem": "纸包推到我面前。她没有说里面是什么。"},
+        {"id": "interact_09", "img": "images/gallery/interact_09.png", "name": "片段 · 彩色的街",
+         "mem": "记忆里，Y 把口红塞给我。那条街是彩色的。"},
+        {"id": "interact_10", "img": "images/gallery/interact_10.png", "name": "片段 · 字迹",
+         "mem": "字迹一行一行。最后一行，是空的。"},
+        {"id": "interact_11", "img": "images/gallery/interact_11.png", "name": "片段 · 帮我带给她",
+         "mem": "他说：帮我带给她。然后就没有然后了。"},
+    ]
+
     ITEM_TO_SKIN = {
         "item_lipstick": "x_lipstick",
         "item_teabag": "z_neutral",
@@ -90,8 +120,12 @@ transform gallery_thumb:
 screen gallery():
     modal True
     add Solid("#0B0F14")
+    if persistent.ending_a_seen and persistent.ending_door_seen and persistent.ending_true_seen:
+        $ persistent.gallery_hidden_unlocked = True
+        if not persistent.unlocked_interacts:
+            $ persistent.unlocked_interacts = [it["id"] for it in INTERACT_ITEMS]
     text "记忆残留" xpos 80 ypos 40 size 44 color "#D8B4F0"
-    text "立绘 [len(persistent.unlocked_skins)]/8 · 设定集 [len(persistent.unlocked_concepts)]/13 · 每一张，都是某一次你来过":
+    text "立绘 [len(persistent.unlocked_skins)]/8 · 设定集 [len(persistent.unlocked_concepts)]/13 · 片段 [len(persistent.unlocked_interacts)]/11 · 每一张，都是某一次你来过":
         xpos 80 ypos 100 size 20 color "#7E8898"
 
     hbox:
@@ -102,6 +136,9 @@ screen gallery():
         textbutton "设定集":
             action SetVariable("gallery_tab", "concept")
             text_size 24 text_color ("#E8735A" if gallery_tab == "concept" else "#7E8898") text_hover_color "#E8735A"
+        textbutton "片段":
+            action SetVariable("gallery_tab", "interact")
+            text_size 24 text_color (("#E8735A" if gallery_tab == "interact" else "#5A6373") if not persistent.gallery_hidden_unlocked else ("#E8735A" if gallery_tab == "interact" else "#7E8898")) text_hover_color "#E8735A"
 
     if gallery_tab == "skin":
         for i, item in enumerate(GALLERY_ITEMS):
@@ -122,7 +159,7 @@ screen gallery():
                     xpos cx ypos (cy + 200) size 20 color "#7E8898"
                 text item["cond"]:
                     xpos cx ypos (cy + 315) size 17 color "#7E8898" xmaximum 280
-    else:
+    elif gallery_tab == "concept":
         for i, item in enumerate(CONCEPT_ITEMS):
             $ cx = 80 + (i % 4) * 300
             $ cy = 200 + (i // 4) * 200
@@ -138,6 +175,26 @@ screen gallery():
                     xpos cx ypos (cy + 20) size 60 color "#3A2F4A"
                 text item["cond"]:
                     xpos cx ypos (cy + 164) size 14 color "#7E8898" xmaximum 280
+
+    elif gallery_tab == "interact":
+        if persistent.gallery_hidden_unlocked:
+            for i, item in enumerate(INTERACT_ITEMS):
+                $ cx = 80 + (i % 4) * 300
+                $ cy = 200 + (i // 4) * 210
+                if item["id"] in persistent.unlocked_interacts:
+                    add item["img"]:
+                        xpos cx ypos cy
+                    text item["name"]:
+                        xpos cx ypos (cy + 164) size 18 color "#C9BFB0"
+                    text item["mem"]:
+                        xpos cx ypos (cy + 188) size 13 color "#7E8898" xmaximum 280
+                else:
+                    text "？":
+                        xpos cx ypos (cy + 20) size 60 color "#3A2F4A"
+        else:
+            text "？？？" xpos 80 ypos 380 size 90 color "#3A2F4A"
+            text "送达、门外、不再等待——把三个结局都走完，这里会亮起来。":
+                xpos 80 ypos 520 size 24 color "#7E8898"
 
     textbutton "返回":
         action Hide("gallery")   ## 主菜单 Show 进入 → Hide 返回；Return() 仅在 call screen 下有效

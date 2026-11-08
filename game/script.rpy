@@ -14,6 +14,27 @@ define Y = Character("Y", color="#B48CD9")
 define Z = Character("Z", color="#D9A441")   ## 暖金——全作唯一的人味色
 
 image warm_glow = "images/warm_glow.png"
+
+transform caption_in(d):
+    alpha 0.0
+    pause d
+    linear 0.9 alpha 1.0
+
+screen intro_captions():
+    ## 左上角：时空锚定
+    text "时间：未来地球资源枯竭后；Y出发远航前委托，X抵达地球时已过去多年。":
+        xpos 90 ypos 80 size 22 color "#C9BFB0" xmaximum 900
+        at caption_in(0.4)
+    ## 环境背景 · 逐句浮现（黑屏上居中偏下）
+    text "从小的朋友，一个喜欢航天，成为了远航者；":
+        xalign 0.5 ypos 640 size 30 color "#F2EAF8"
+        at caption_in(2.0)
+    text "一个喜欢编程，留在了近地智慧站，成为了运维人员；":
+        xalign 0.5 ypos 706 size 30 color "#F2EAF8"
+        at caption_in(4.0)
+    text "一个喜欢写诗，成为了驻留者":
+        xalign 0.5 ypos 772 size 30 color "#F2EAF8"
+        at caption_in(6.0)
 ## ── 新素材包（主场景只用这三张 + 两张调色派生）──
 image bg_z_night = "images/bg_z_night.png"               ## 夜晚室内·面对 Z
 image bg_helipad = "images/bg_helipad.png"               ## 航天港停机坪（飞机）
@@ -76,25 +97,20 @@ default persistent.afm_mid_set = False     ## 旧档兼容：确保默认值写�
 label start:
 
     ## 🔺 自动前进速度设中值一次（🔴 v54 修真 bug：引擎字段是 afm_time（量程 0-30，0=永不推进），
-    ## 旧代码写 auto_forward_time 是无效属性静默不生效 → 用新标记再兜一次旧档，之后玩家自调不覆盖）
-    if not persistent.afm_speed_set:
-        $ preferences.afm_time = 15.0
-        $ persistent.afm_speed_set = True
-    if not persistent.afm_mid_set:
-        $ preferences.afm_time = 15.0
-        $ persistent.afm_mid_set = True
+    "她忘了我。忘了每一个来过的人。只留下释然，和那个空出的珊瑚红位置。"
+    "信标升空了。"
+    scene bg_helipad with fade   ## 停机坪·信标升空
+    play music "audio/freezer_hum.ogg" fadein 1.0   ## 结局 A 关键音：冰柜嗡嗡
+    "雾散了一瞬，又合上。街那头，便利店冰柜嗡嗡响。"
+    "第 48 支口红，没有出现。"
+    "—— 结局 A · 送达 ——"
+    return
 
-    scene bg_cover with fade
-    "……"
-    scene black with fade
 
-    jump story_start
-
-    ## ── 幕一 · 任务委托（表世界 · 早）──
-    ## 交通动线：航天港停机坪（飞机）→ T3 中转站（地铁）→ 街区便利店；中间只换一次交通工具
-    scene bg_helipad with fade   ## 航天港停机坪
-    play music "audio/city_ambient.ogg" fadein 2.0   ## 城市底噪
-    "雾压得很低。C-47 停在坪上，舱门开着，像在等一个不会来的人。"
-    "远处航天港的灯，一盏一盏亮起来。"
-
-    scene bg_transfer with dissolve   ## T3 中转站 · 地铁（换乘点）
+label ending_b:
+    "我收回了手。把口红，带了回来。"
+    "循环断了。她的记忆开始崩解——但她第一次，想起了「等待」之外的人。"
+    "我走出小屋。灰调的世界里，我低头看了一眼手里的珊瑚红。"
+    "然后，天边出现了第二种颜色。"
+    "—— 结局 B · 觉醒 ——"
+    return

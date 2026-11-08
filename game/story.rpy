@@ -23,12 +23,24 @@ image bg_store_inside = "images/bg_store_inside.png"
 image bg_park = "images/bg_park.png"
 image bg_park_inside = "images/bg_park_inside.png"
 image bg_z_inside = "images/bg_z_inside.png"
-image y_screen = "images/y_sound_only.png"        ## Y 对话期间的投影屏（Y SOUND ONLY）
+image y_screen = "images/y_sound_soft.png"
 
+## 开机做「老电视打开」动效——压扁亮线垂直展开 + 白色过曝一闪（brightness 非 ATL 属性，改用闪光层）
 transform y_screen_float:
-    xalign 0.32 yalign 0.5
-    alpha 0.0
-    linear 0.7 alpha 0.92
+    xalign 0.5 yanchor 1.0 ypos 890   ## 悬浮于对话框上沿（895）上方一点
+    yzoom 0.03 xzoom 0.55
+    easein 0.28 yzoom 1.0 xzoom 1.0
+    linear 0.5 alpha 0.96
+    block:
+        yoffset 0
+        linear 2.2 yoffset -8
+        linear 2.2 yoffset 8
+        repeat
+
+image tv_flash = Solid("#FFFFFF")
+transform tv_flash_in:
+    alpha 0.85
+    linear 0.22 alpha 0.0
 
 
 label story_start:
@@ -80,6 +92,9 @@ label story_start:
     $ x_portrait_on = False
     play sound "audio/sfx_door.wav"
     show y_screen at y_screen_float
+    show tv_flash at tv_flash_in   ## 开机过曝一闪
+    pause 0.25
+    hide tv_flash
     "Y 站在冰柜旁，把磨白的外壳擦了擦。"
     Y "这个，帮我带给她。"
     X "你自己送。"
@@ -340,6 +355,9 @@ label story_start:
     Z "是。只有你的，我还没收到。"
     "她把茶又推近了一点。"
     Z "这次，你可以自己决定。"
+    ## 分岔前自动存档：读档页「A」页可回到这个选择（另一个结局补票入口）
+    $ renpy.loadsave.force_autosave(True)
+    "—— 自动存档已记录。想换一个结局，从「读档」页的「A」页回到这里。 ——"
     menu:
         "喝下这杯茶":
             jump ending_true
@@ -361,6 +379,7 @@ label ending_deliver:
     "列车驶过。小卖铺冰柜仍在嗡鸣。"
     "没有第 48 支口红了。"
     "—— 结局 A · 送达 ——"
+    $ persistent.ending_a_seen = True   ## 片段解锁条件：结局 A 达成
     $ unlock_skin("z_smile")   ## 记忆残留：结局 A 解锁
     $ unlock_concept("concept_store")   ## 设定集：小卖铺概念稿（结局 A 最后一幕）
 
@@ -406,6 +425,7 @@ label ending_secret:
     "智能设备：未读讯息，已重新置顶。"
     "发件人：Y。内容：帮我交给Z。"
     "—— 隐藏结局 · 门外 ——"
+    $ persistent.ending_door_seen = True   ## 片段解锁条件：隐藏结局达成
     $ unlock_skin("z_side")
     $ unlock_skin("z_red")
     $ unlock_concept("concept_duoji")    ## 设定集：三小只三视图与同框（门外解锁）
@@ -434,6 +454,7 @@ label ending_true:
     "有些人不是忘记了等待。"
     "而是终于想起，自己可以不再等待。"
     "—— 真结局 · 不再等待 ——"
+    $ persistent.ending_true_seen = True   ## 片段解锁条件：真结局达成
     $ unlock_skin("z_redpocket")   ## 记忆残留：真结局解锁
     $ unlock_concept("concept_cover")   ## 设定集：主视觉概念稿（真结局解锁）
     $ persistent.ch5_unlocked = True   ## 真结局后解锁主菜单「尾声 · 第五章」

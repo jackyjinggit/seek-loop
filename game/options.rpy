@@ -17,13 +17,13 @@ define gui.choice_button_text_hover_color = "#E8735A"  ## 珊瑚红——选择 
 ## 回主菜单（结局「就这样」）时引擎会自动重新播放。
 define config.main_menu_music = "audio/outdoor_bgm.mp3"
 
-## 🔺 中文字体（Ren'Py 默认 DejaVuSans 不含 CJK → 豆腐块；复用 Noto Sans SC，OFL 1.1）
-define gui.text_font = "NotoSansSC-Regular.otf"
-define gui.name_text_font = "NotoSansSC-Regular.otf"
-define gui.interface_text_font = "NotoSansSC-Regular.otf"
-define gui.button_text_font = "NotoSansSC-Regular.otf"
-define gui.choice_button_text_font = "NotoSansSC-Regular.otf"
-define gui.pref_button_text_font = "NotoSansSC-Regular.otf"
+## 🔺 中文字体（得意黑 Smiley Sans · oooohmygosh 出品 · OFL 1.1 可嵌入；缺字显示□属正常，正文均为常用字）
+define gui.text_font = "SmileySans-Oblique.ttf"
+define gui.name_text_font = "SmileySans-Oblique.ttf"
+define gui.interface_text_font = "SmileySans-Oblique.ttf"
+define gui.button_text_font = "SmileySans-Oblique.ttf"
+define gui.choice_button_text_font = "SmileySans-Oblique.ttf"
+define gui.pref_button_text_font = "SmileySans-Oblique.ttf"
 
 define config.quit_action = Quit(confirm=False)
 

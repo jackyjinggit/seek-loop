@@ -7,13 +7,21 @@ default critter_found = 0   ## 彩蛋发现数
 
 screen monitor_points():
     textbutton "监视点 · 巷口":
-        action Return("xiaomi") xpos 300 ypos 500 text_color "#B48CD9" text_hover_color "#E8735A"
+        action Return("xiaomi") xpos 300 ypos 500 text_size 26 xpadding 28 ypadding 10
+        background Frame("images/bubble.png", 31, 31) hover_background Frame("images/bubble_hover.png", 31, 31)
+        text_color "#F2E6FF" text_hover_color "#FFB27A"
     textbutton "监视点 · 屋檐":
-        action Return("duoji") xpos 1300 ypos 400 text_color "#B48CD9" text_hover_color "#E8735A"
+        action Return("duoji") xpos 1300 ypos 400 text_size 26 xpadding 28 ypadding 10
+        background Frame("images/bubble.png", 31, 31) hover_background Frame("images/bubble_hover.png", 31, 31)
+        text_color "#F2E6FF" text_hover_color "#FFB27A"
     textbutton "监视点 · 街角":
-        action Return("pading") xpos 900 ypos 700 text_color "#B48CD9" text_hover_color "#E8735A"
+        action Return("pading") xpos 900 ypos 700 text_size 26 xpadding 28 ypadding 10
+        background Frame("images/bubble.png", 31, 31) hover_background Frame("images/bubble_hover.png", 31, 31)
+        text_color "#F2E6FF" text_hover_color "#FFB27A"
     textbutton "继续走":
-        action Return("leave") xpos 880 ypos 880 text_color "#B48CD9" text_hover_color "#E8735A"
+        action Return("leave") xpos 880 ypos 880 text_size 26 xpadding 28 ypadding 10
+        background Frame("images/bubble.png", 31, 31) hover_background Frame("images/bubble_hover.png", 31, 31)
+        text_color "#F2E6FF" text_hover_color "#FFB27A"
 
 label monitor_loop:
     call screen monitor_points
